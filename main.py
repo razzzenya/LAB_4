@@ -2,22 +2,23 @@ import pandas as pd
 import csv
 import os
 
-path = 'dataset.csv'
 
-def c_to_f(temperature : int) -> int:
+def c_to_f(temperature: int) -> int or str:
     """Конвертирует температуру в градусах Цельсия в градусы Фаренгейта
 
     Args:
         temperature (int): Значение температуры в Цельсиях
 
     Returns:
-        int: Возвращаемое значение в Фаренгейтах
+        int or str: Возвращаемое значение в Фаренгейтах , либо строку 'None'
     """
-    
-    return (temperature * 9/5) + 32
+    if temperature == 'None':
+        return 'None' 
+
+    return (int(temperature) * 9/5) + 32
 
 
-
+path = 'dataset.csv'
 with open(path, 'r', encoding='utf-8') as file:
     data = list(csv.reader(file, delimiter=","))
 
@@ -39,7 +40,7 @@ with open(path, 'r', encoding='utf-8') as file:
         pr_night.append(i[5])
         wind_night.append(i[6])
 
-#объект DataFrame
+# объект DataFrame
 
     df = pd.DataFrame({
         'date': dates,
@@ -51,7 +52,7 @@ with open(path, 'r', encoding='utf-8') as file:
         'wind night': wind_night
     })
 
-#обработка пропущенных значений
+# обработка пропущенных значений
 
 for i in range(len(df)):
 
@@ -76,4 +77,17 @@ for i in range(len(df)):
     if df.iloc[i]['wind night'] == '':
         df.iloc[i]['wind night'] = 'None'
 
-#Добавление в конец значения температуры в Фаренгейтах
+# Добавление в конец значения температуры в Фаренгейтах
+
+fahrenheit_day = []
+fahrenheit_night = []
+
+for i in range(len(df)):
+    fahrenheit_day.append(c_to_f(df.iloc[i]['temperature day']))
+    fahrenheit_night.append(c_to_f(df.iloc[i]['temperature night']))
+
+
+df['fahrenheit temperature day'] = fahrenheit_day
+df['fahrenheit temperature night'] = fahrenheit_night
+
+print(df)
