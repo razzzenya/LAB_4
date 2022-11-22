@@ -17,9 +17,6 @@ def c_to_f(temperature: int) -> int or str:
     Returns:
         int or str: Возвращаемое значение в Фаренгейтах , либо NaN
     """
-    if temperature == np.nan:
-        return np.nan
-
     return (temperature * 9 / 5) + 32
 
 
